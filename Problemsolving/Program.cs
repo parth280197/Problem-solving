@@ -26,9 +26,79 @@ namespace Problemsolving
       //  Ouptut: Sum found between indexes 2 and 4
       int[] array = { 1, 4 };
       var result = p.FindSumIndexes(array, 0);
+
+      //Find the famous person in two dimensional array.
+      bool[,] peoples = new bool[4, 4] { { true, false, true, false }, { true, true, true, false }, { false, false, true, false }, { false, true, true, true } };
+      Console.WriteLine(FindFamousPeople2(peoples));
       Console.WriteLine(result.Item1 + result.Item2 + "," + result.Item3);
       Console.ReadLine();
 
+    }
+    public static int FindFamousPeople(bool[,] peoples)
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        bool allPeopleKnow = true;
+        bool personKnowsSomeone = false;
+        for (int j = 0; j < 4; j++)
+        {
+          if (peoples[j, i] == false)
+          {
+            allPeopleKnow = false;
+            break;
+          }
+          if (i != j && peoples[i, j] == true)
+          {
+            personKnowsSomeone = true;
+          }
+        }
+        if (allPeopleKnow && !personKnowsSomeone)
+        {
+          return i + 1;
+        }
+      }
+      return -1;
+    }
+    public static int FindFamousPeople2(bool[,] peoples)
+    {
+      List<int> personIndex = new List<int>();
+      int length = 0;
+
+      while (length < 4)
+      {
+        if (peoples[0, length] == true)
+        {
+          personIndex.Add(length);
+        }
+        length++;
+      }
+
+
+      foreach (int i in personIndex)
+      {
+        int searchIndex = 0;
+        bool allPeopleKnow = true;
+        bool personKnowsSomeone = false;
+        while (searchIndex < 4)
+        {
+          if (peoples[searchIndex, i] == false)
+          {
+            allPeopleKnow = false;
+            break;
+          }
+          if (peoples[i, searchIndex] == true && i != searchIndex)
+          {
+            personKnowsSomeone = true;
+            break;
+          }
+          searchIndex++;
+        }
+        if (allPeopleKnow && !personKnowsSomeone)
+        {
+          return i + 1;
+        }
+      }
+      return -1;
     }
     private (string, int, int) FindSumIndexes(int[] array, int sum)
     {
