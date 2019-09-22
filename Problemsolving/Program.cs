@@ -33,32 +33,40 @@ namespace Problemsolving
       Console.WriteLine(result.Item1 + result.Item2 + "," + result.Item3);
 
       int[,] crossArray = new int[4, 9] {
-        {0,0,0,0,1,1,1,0,0},
-        {0,0,0,1,0,1,1,1,0},
-        {0,1,0,1,1,1,1,1,1},
-        {1,1,1,0,0,1,1,1,1}
+        {0,0,0,0,1,0,1,0,0},
+        {0,0,0,1,0,1,0,0,0},
+        {0,1,0,1,1,1,0,0,1},
+        {1,1,1,0,0,0,1,1,0}
        };
-      Console.WriteLine("Max Length is:==== " + CheckMaxCrossLength(crossArray));
+      Console.WriteLine("Max Length of cross is:==== " + CheckMaxCrossLength(crossArray));
       Console.ReadLine();
 
     }
 
     public static int CheckMaxCrossLength(int[,] crossArray)
     {
+      //boundary for i and j respectively
       int bound1 = crossArray.GetUpperBound(0);
       int bound2 = crossArray.GetUpperBound(1);
       int maxLength = 0;
+
       for (int i = 0; i <= bound1; i++)
       {
         for (int j = 0; j <= bound2; j++)
         {
           if (crossArray[i, j] == 0 && i < bound1)
           {
+            //value for left diagonal of cross
             var left = 0;
-            var right = CheckRight(crossArray, i, j);
-            var tempRight = right;
             var tempLeft = 0;
 
+            //value for right diagonal of cross
+            var right = CheckRight(crossArray, i, j);
+            var tempRight = right;
+
+            //first 0 of left diagonal
+            //(j + tempRight - 1)
+            
             while (tempRight > 1 && (j + tempRight - 1) <= bound2)
             {
               if (crossArray[i, j + (tempRight - 1)] == 0)
@@ -89,19 +97,11 @@ namespace Problemsolving
     public static int CheckRight(int[,] crossArray, int i, int j)
     {
       int length = 0;
-      while (i <= crossArray.GetUpperBound(0) && j <= crossArray.GetUpperBound(1))
+      while (i <= crossArray.GetUpperBound(0) && j <= crossArray.GetUpperBound(1) && crossArray[i, j] == 0)
       {
-        if (crossArray[i, j] == 0)
-        {
-          length++;
-          i++;
-          j++;
-        }
-        else
-        {
-          break;
-        }
-
+        length++;
+        i++;
+        j++;
       }
       return length;
     }
@@ -109,19 +109,11 @@ namespace Problemsolving
     public static int CheckLeft(int[,] crossArray, int i, int j)
     {
       int length = 0;
-      while (i <= crossArray.GetUpperBound(0) && j >= 0)
+      while (i <= crossArray.GetUpperBound(0) && j >= 0 && crossArray[i, j] == 0)
       {
-        if (crossArray[i, j] == 0)
-        {
-          length++;
-          i++;
-          j--;
-        }
-        else
-        {
-          break;
-        }
-
+        length++;
+        i++;
+        j--;
       }
       return length;
     }
