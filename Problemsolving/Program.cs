@@ -31,9 +31,119 @@ namespace Problemsolving
       bool[,] peoples = new bool[4, 4] { { true, false, true, false }, { true, true, true, false }, { false, false, true, false }, { false, true, true, true } };
       Console.WriteLine(FindFamousPeople2(peoples));
       Console.WriteLine(result.Item1 + result.Item2 + "," + result.Item3);
+
+      int[,] crossArray = new int[4, 9] {
+        {0,0,0,0,1,1,1,0,0},
+        {0,0,0,1,0,1,1,1,0},
+        {0,1,0,1,1,1,1,1,1},
+        {1,1,1,0,0,1,1,1,1}
+       };
+      Console.WriteLine("Max Length is:==== " + CheckMaxCrossLength(crossArray));
       Console.ReadLine();
 
     }
+
+    public static int CheckMaxCrossLength(int[,] crossArray)
+    {
+      int bound1 = crossArray.GetUpperBound(0);
+      int bound2 = crossArray.GetUpperBound(1);
+      int maxLength = 0;
+      for (int i = 0; i <= bound1; i++)
+      {
+        for (int j = 0; j <= bound2; j++)
+        {
+          if (crossArray[i, j] == 0 && i < bound1)
+          {
+            var left = 0;
+            var right = CheckRight(crossArray, i, j);
+            var tempRight = right;
+            var tempLeft = 0;
+
+            while (tempRight > 1 && (j + tempRight - 1) <= bound2)
+            {
+              if (crossArray[i, j + (tempRight - 1)] == 0)
+              {
+                tempLeft = CheckLeft(crossArray, i, j + (tempRight - 1));
+                if (tempLeft == tempRight && tempLeft > left)
+                {
+                  left = tempLeft;
+                }
+                tempRight--;
+              }
+              else
+              {
+                tempRight--;
+              }
+            }
+
+            if (maxLength < left && maxLength < right && left > 0)
+            {
+              maxLength = SetMaxLength(left, right);
+            }
+          }
+        }
+      }
+      return maxLength;
+    }
+
+    public static int CheckRight(int[,] crossArray, int i, int j)
+    {
+      int length = 0;
+      while (i <= crossArray.GetUpperBound(0) && j <= crossArray.GetUpperBound(1))
+      {
+        if (crossArray[i, j] == 0)
+        {
+          length++;
+          i++;
+          j++;
+        }
+        else
+        {
+          break;
+        }
+
+      }
+      return length;
+    }
+
+    public static int CheckLeft(int[,] crossArray, int i, int j)
+    {
+      int length = 0;
+      while (i <= crossArray.GetUpperBound(0) && j >= 0)
+      {
+        if (crossArray[i, j] == 0)
+        {
+          length++;
+          i++;
+          j--;
+        }
+        else
+        {
+          break;
+        }
+
+      }
+      return length;
+    }
+
+    public static int SetMaxLength(int left, int right)
+    {
+      int UpdatedMaxLength = 0;
+      if (left == right)
+      {
+        UpdatedMaxLength = left;
+      }
+      else if (left < right)
+      {
+        UpdatedMaxLength = left;
+      }
+      else
+      {
+        UpdatedMaxLength = right;
+      }
+      return UpdatedMaxLength;
+    }
+
     public static int FindFamousPeople(bool[,] peoples)
     {
       for (int i = 0; i < 4; i++)
